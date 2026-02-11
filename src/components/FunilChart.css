@@ -67,7 +67,7 @@
 }
 
 .funil-label {
-  width: 220px;
+  width: 240px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -94,10 +94,72 @@
   gap: 2px;
 }
 
+.etapa-nome-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .etapa-nome {
   font-size: 0.875rem;
   color: var(--color-text);
   font-weight: 500;
+}
+
+/* Tooltip */
+.tooltip-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tooltip-icon {
+  color: var(--color-text-muted);
+  cursor: help;
+  transition: color 0.2s ease;
+}
+
+.tooltip-icon:hover {
+  color: var(--color-accent);
+}
+
+.tooltip-content {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  background: var(--color-card-highlight);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 100;
+  box-shadow: var(--shadow-lg);
+  max-width: 280px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-border);
+}
+
+.tooltip-wrapper:hover .tooltip-content {
+  opacity: 1;
+  visibility: visible;
 }
 
 .etapa-opcional {
@@ -176,4 +238,33 @@
   .funil-bar-container {
     width: 100%;
   }
+
+  .tooltip-content {
+    left: 0;
+    transform: translateX(0);
+    max-width: 200px;
+  }
+
+  .tooltip-content::after {
+    left: 20px;
+    transform: translateX(0);
+  }
+}
+/* Barra clicável */
+.funil-bar-container.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.funil-bar-container.clickable:hover {
+  transform: scaleY(1.1);
+  box-shadow: 0 0 20px rgba(247, 148, 29, 0.3);
+}
+
+.funil-bar-container.clickable:hover .funil-bar {
+  filter: brightness(1.1);
+}
+
+.funil-bar-container.clickable:active {
+  transform: scaleY(1.05);
 }
