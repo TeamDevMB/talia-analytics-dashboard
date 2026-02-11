@@ -1,0 +1,59 @@
+:root {
+  /* Cores Light Mode - Tema Azul Metrobyte */
+  --color-primary: #1E4785;
+  --color-primary-light: #3B6BC7;
+  --color-accent: #F7941D;
+  --color-accent-light: #FFB347;
+  --color-bg: #0F172A;
+  --color-bg-gradient: linear-gradient(145deg, #1E4785 0%, #0F172A 50%, #1a1a2e 100%);
+  --color-card: rgba(30, 41, 59, 0.85);
+  --color-card-highlight: rgba(40, 55, 80, 0.9);
+  --color-text: #F1F5F9;
+  --color-text-muted: #94A3B8;
+  --color-success: #34D399;
+  --color-danger: #F87171;
+  --color-border: rgba(59, 107, 199, 0.3);
+  --color-border-highlight: rgba(247, 148, 29, 0.5);
+  --color-card-rgb: 30, 41, 59;
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 30px rgba(247, 148, 29, 0.15);
+}
+
+[data-theme="dark"] {
+  --color-primary: #5B8BD9;
+  --color-primary-light: #7BA3E8;
+  --color-accent: #F7941D;
+  --color-accent-light: #FFB347;
+  --color-bg: #050A14;
+  --color-bg-gradient: linear-gradient(145deg, #0F172A 0%, #050A14 50%, #0a0f1a 100%);
+  --color-card: rgba(15, 23, 42, 0.9);
+  --color-card-highlight: rgba(25, 35, 55, 0.95);
+  --color-text: #F1F5F9;
+  --color-text-muted: #94A3B8;
+  --color-success: #34D399;
+  --color-danger: #F87171;
+  --color-border: rgba(91, 139, 217, 0.25);
+  --color-border-highlight: rgba(247, 148, 29, 0.4);
+  --color-card-rgb: 15, 23, 42;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--color-bg-gradient);
+  background-attachment: fixed;
+  color: var(--color-text);
+  transition: background 0.3s, color 0.3s;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
