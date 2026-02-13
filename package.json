@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
+    "@supabase/supabase-js": "^2.95.3",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.1",
     "lucide-react": "^0.563.0",
