@@ -1,16 +1,24 @@
 import { useState, useEffect } from 'react'
-import { UsersThree, UserMinus, EnvelopeSimple, Target, Sun, Moon, ArrowsClockwise } from '@phosphor-icons/react'
+import { UsersThree, UserMinus, EnvelopeSimple, Target, Sun, Moon, ArrowsClockwise, SignOut } from '@phosphor-icons/react'
+import { useAuth } from '../contexts/AuthContext'
 import { fetchFunil } from '../services/api'
 import KPICard from '../components/KPICard'
 import FunilChart from '../components/FunilChart'
 import './Dashboard.css'
 
 function Dashboard({ darkMode, setDarkMode }) {
+  const { user, signOut } = useAuth()
   const [dados, setDados] = useState(null)
   const [periodo, setPeriodo] = useState(30)
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState(null)
   const [ultimaAtualizacao, setUltimaAtualizacao] = useState(null)
+
+  const handleLogout = async () => {
+    if (confirm('Deseja realmente sair?')) {
+      await signOut()
+    }
+  }
 
   const carregarDados = () => {
     setLoading(true)
@@ -100,6 +108,14 @@ function Dashboard({ darkMode, setDarkMode }) {
             title={darkMode ? 'Modo claro' : 'Modo escuro'}
           >
             {darkMode ? <Sun size={20} weight="duotone" /> : <Moon size={20} weight="duotone" />}
+          </button>
+
+          <button 
+            className="btn-icon btn-logout"
+            onClick={handleLogout}
+            title="Sair"
+          >
+            <SignOut size={20} weight="duotone" />
           </button>
         </div>
       </header>

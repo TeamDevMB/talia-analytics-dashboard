@@ -279,3 +279,8 @@
     align-items: flex-start;
   }
 }
+/* Botão de logout */
+.btn-logout:hover {
+  color: var(--color-danger) !important;
+  border-color: var(--color-danger) !important;
+}
