@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react'
-import { UsersThree, UserMinus, EnvelopeSimple, Target, Sun, Moon, ArrowsClockwise, SignOut } from '@phosphor-icons/react'
+import { UsersThree, UserMinus, EnvelopeSimple, Target, Sun, Moon, ArrowsClockwise, SignOut, Warning, ChartLineDown, MapPin } from '@phosphor-icons/react'
 import { useAuth } from '../contexts/AuthContext'
-import { fetchFunil } from '../services/api'
+import { fetchFunil, fetchAbandono } from '../services/api'
 import KPICard from '../components/KPICard'
 import FunilChart from '../components/FunilChart'
+import AbandonoChart from '../components/AbandonoChart'
+import TabNavigation from '../components/TabNavigation'
 import './Dashboard.css'
 
 function Dashboard({ darkMode, setDarkMode }) {
   const { user, signOut } = useAuth()
   const [dados, setDados] = useState(null)
+  const [dadosAbandono, setDadosAbandono] = useState(null)
   const [periodo, setPeriodo] = useState(30)
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState(null)
   const [ultimaAtualizacao, setUltimaAtualizacao] = useState(null)
+  const [abaAtiva, setAbaAtiva] = useState('qualificacao')
 
   const handleLogout = async () => {
     if (confirm('Deseja realmente sair?')) {
@@ -20,20 +24,24 @@ function Dashboard({ darkMode, setDarkMode }) {
     }
   }
 
-  const carregarDados = () => {
+  const carregarDados = async () => {
     setLoading(true)
     setErro(null)
     
-    fetchFunil(periodo)
-      .then(data => {
-        setDados(data)
-        setUltimaAtualizacao(new Date())
-        setLoading(false)
-      })
-      .catch(err => {
-        setErro(err.message)
-        setLoading(false)
-      })
+    try {
+      const [funilData, abandonoData] = await Promise.all([
+        fetchFunil(periodo),
+        fetchAbandono(periodo)
+      ])
+      
+      setDados(funilData)
+      setDadosAbandono(abandonoData)
+      setUltimaAtualizacao(new Date())
+      setLoading(false)
+    } catch (err) {
+      setErro(err.message)
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -41,16 +49,14 @@ function Dashboard({ darkMode, setDarkMode }) {
   }, [periodo])
 
   const calcularKPIs = () => {
-    if (!dados) return { total: 0, pararam: 0, coletados: 0, comDor: 0 }
+    if (!dados) return { total: 0, coletados: 0, comDor: 0 }
     
     const funil = dados.funil
     const total = funil.find(e => e.id === 'conversa_iniciada')?.total || 0
-    const nomeColetado = funil.find(e => e.id === 'nome_coletado')?.total || 0
     const coletados = funil.find(e => e.id === 'email_coletado')?.total || 0
     const comDor = funil.find(e => e.id === 'com_dor')?.total || 0
-    const pararam = total - nomeColetado
 
-    return { total, pararam, coletados, comDor }
+    return { total, coletados, comDor }
   }
 
   const formatarData = (data) => {
@@ -120,6 +126,8 @@ function Dashboard({ darkMode, setDarkMode }) {
         </div>
       </header>
 
+      <TabNavigation abaAtiva={abaAtiva} setAbaAtiva={setAbaAtiva} />
+
       {loading && (
         <div className="status-container">
           <div className="loader"></div>
@@ -133,7 +141,7 @@ function Dashboard({ darkMode, setDarkMode }) {
         </div>
       )}
 
-      {!loading && !erro && (
+      {!loading && !erro && abaAtiva === 'qualificacao' && (
         <>
           <section className="kpi-section">
             <div className="kpi-grid">
@@ -146,14 +154,14 @@ function Dashboard({ darkMode, setDarkMode }) {
               />
               <KPICard 
                 icon={UserMinus} 
-                label="Pararam de Responder" 
-                value={kpis.pararam}
+                label="Abandonos" 
+                value={dadosAbandono?.total_abandonos || 0}
                 color="danger"
               />
               <KPICard 
                 icon={EnvelopeSimple} 
-                label="Leads Coletados" 
-                value={kpis.coletados}
+                label="Leads Ativos" 
+                value={kpis.total - (dadosAbandono?.total_abandonos || 0)}
                 color="success"
               />
               <KPICard 
@@ -169,6 +177,50 @@ function Dashboard({ darkMode, setDarkMode }) {
             <FunilChart dados={dados} />
           </section>
         </>
+      )}
+
+      {!loading && !erro && abaAtiva === 'abandono' && dadosAbandono && (
+        <>
+          <section className="kpi-section">
+            <div className="kpi-grid">
+              <KPICard 
+                icon={Warning} 
+                label="Total de Abandonos" 
+                value={dadosAbandono.total_abandonos}
+                color="danger"
+                highlight={true}
+              />
+              <KPICard 
+                icon={ChartLineDown} 
+                label="Taxa de Abandono" 
+                value={`${dadosAbandono.taxa_abandono}%`}
+                color="danger"
+              />
+              <KPICard 
+                icon={MapPin} 
+                label="Ponto Crítico" 
+                value={dadosAbandono.ponto_critico?.replace('Abandonou ', '').replace('no ', '').replace('após ', '')}
+                color="accent"
+              />
+              <KPICard 
+                icon={UsersThree} 
+                label="Total de Leads" 
+                value={dadosAbandono.total_leads}
+                color="primary"
+              />
+            </div>
+          </section>
+
+          <section className="funil-section">
+            <AbandonoChart dados={dadosAbandono} />
+          </section>
+        </>
+      )}
+
+      {!loading && !erro && abaAtiva === 'performance' && (
+        <div className="coming-soon">
+          <p>🚧 Seção de Performance em construção...</p>
+        </div>
       )}
 
       <footer className="dashboard-footer">

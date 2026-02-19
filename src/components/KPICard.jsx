@@ -3,9 +3,17 @@ import './KPICard.css'
 
 function KPICard({ icon: Icon, label, value, color = 'primary', highlight = false }) {
   const [displayValue, setDisplayValue] = useState(0)
+  
+  // Verifica se o valor é numérico
+  const isNumeric = typeof value === 'number'
 
-  // Animação de contagem
+  // Animação de contagem (apenas para números)
   useEffect(() => {
+    if (!isNumeric) {
+      setDisplayValue(value)
+      return
+    }
+
     const duration = 1000
     const steps = 30
     const increment = value / steps
@@ -22,7 +30,12 @@ function KPICard({ icon: Icon, label, value, color = 'primary', highlight = fals
     }, duration / steps)
 
     return () => clearInterval(timer)
-  }, [value])
+  }, [value, isNumeric])
+
+  // Formata o valor para exibição
+  const formattedValue = isNumeric 
+    ? displayValue.toLocaleString('pt-BR')
+    : displayValue
 
   return (
     <div className={`kpi-card kpi-${color} ${highlight ? 'kpi-highlight' : ''}`}>
@@ -31,7 +44,7 @@ function KPICard({ icon: Icon, label, value, color = 'primary', highlight = fals
       </div>
       <div className="kpi-content">
         <span className="kpi-label">{label}</span>
-        <span className="kpi-value">{displayValue.toLocaleString('pt-BR')}</span>
+        <span className="kpi-value">{formattedValue}</span>
       </div>
       {highlight && <div className="kpi-badge">Principal</div>}
     </div>

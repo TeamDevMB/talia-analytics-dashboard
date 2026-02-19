@@ -1,0 +1,240 @@
+.abandono-container {
+  background: var(--color-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 20px;
+  padding: 28px;
+  margin-top: 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(248, 113, 113, 0.1);
+}
+
+.abandono-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(248, 113, 113, 0.2);
+}
+
+.abandono-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #F87171;
+}
+
+.abandono-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.abandono-total {
+  font-size: 0.875rem;
+  color: #F87171;
+  background: rgba(248, 113, 113, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  border: 1px solid rgba(248, 113, 113, 0.2);
+}
+
+.abandono-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.abandono-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.abandono-row.animado {
+  animation: slideIn 0.5s ease forwards;
+}
+
+.abandono-label {
+  width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.abandono-label .etapa-numero {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #F87171, #EF4444);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.abandono-label .etapa-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.abandono-label .etapa-nome-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.abandono-label .etapa-nome {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.abandono-label .tooltip-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.abandono-label .tooltip-icon {
+  color: var(--color-text-muted);
+  cursor: help;
+  transition: color 0.2s ease;
+}
+
+.abandono-label .tooltip-icon:hover {
+  color: #F87171;
+}
+
+.abandono-label .tooltip-content {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  background: var(--color-card-highlight);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 100;
+  box-shadow: var(--shadow-lg);
+  max-width: 280px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.abandono-label .tooltip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-border);
+}
+
+.abandono-label .tooltip-wrapper:hover .tooltip-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+.abandono-bar-container {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  height: 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.abandono-bar-container.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.abandono-bar-container.clickable:hover {
+  transform: scaleY(1.1);
+  box-shadow: 0 0 20px rgba(248, 113, 113, 0.3);
+}
+
+.abandono-bar-container.clickable:hover .abandono-bar {
+  filter: brightness(1.1);
+}
+
+.abandono-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #EF4444 0%, #F87171 50%, #FCA5A5 100%);
+  border-radius: 10px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.abandono-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+  border-radius: 10px;
+}
+
+.abandono-bar-value {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 1;
+}
+
+.abandono-bar-value strong {
+  font-weight: 700;
+}
+
+.abandono-bar-value .percentual {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .abandono-container {
+    padding: 20px;
+  }
+
+  .abandono-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .abandono-label {
+    width: 100%;
+  }
+
+  .abandono-bar-container {
+    width: 100%;
+  }
+}
