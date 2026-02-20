@@ -1,0 +1,56 @@
+.performance-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.insight-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 20px 24px;
+  transition: all 0.3s ease;
+}
+
+.insight-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+}
+
+.insight-card svg {
+  color: var(--color-primary);
+}
+
+.insight-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.insight-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.insight-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+@media (max-width: 640px) {
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+}

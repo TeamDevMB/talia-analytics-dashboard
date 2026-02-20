@@ -1,17 +1,21 @@
 import { useState, useEffect } from 'react'
 import { UsersThree, UserMinus, EnvelopeSimple, Target, Sun, Moon, ArrowsClockwise, SignOut, Warning, ChartLineDown, MapPin } from '@phosphor-icons/react'
 import { useAuth } from '../contexts/AuthContext'
-import { fetchFunil, fetchAbandono } from '../services/api'
+import { fetchFunil, fetchAbandono, fetchPerformance } from '../services/api'
 import KPICard from '../components/KPICard'
 import FunilChart from '../components/FunilChart'
 import AbandonoChart from '../components/AbandonoChart'
 import TabNavigation from '../components/TabNavigation'
+import PerformanceCards from '../components/PerformanceCards'
+import ClassificacaoChart from '../components/ClassificacaoChart'
+import HorariosPicoChart from '../components/HorariosPicoChart'
 import './Dashboard.css'
 
 function Dashboard({ darkMode, setDarkMode }) {
   const { user, signOut } = useAuth()
   const [dados, setDados] = useState(null)
   const [dadosAbandono, setDadosAbandono] = useState(null)
+  const [dadosPerformance, setDadosPerformance] = useState(null)
   const [periodo, setPeriodo] = useState(30)
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState(null)
@@ -29,13 +33,15 @@ function Dashboard({ darkMode, setDarkMode }) {
     setErro(null)
     
     try {
-      const [funilData, abandonoData] = await Promise.all([
+      const [funilData, abandonoData, performanceData] = await Promise.all([
         fetchFunil(periodo),
-        fetchAbandono(periodo)
+        fetchAbandono(periodo),
+        fetchPerformance(periodo)
       ])
       
       setDados(funilData)
       setDadosAbandono(abandonoData)
+      setDadosPerformance(performanceData)
       setUltimaAtualizacao(new Date())
       setLoading(false)
     } catch (err) {
@@ -217,10 +223,19 @@ function Dashboard({ darkMode, setDarkMode }) {
         </>
       )}
 
-      {!loading && !erro && abaAtiva === 'performance' && (
-        <div className="coming-soon">
-          <p>🚧 Seção de Performance em construção...</p>
-        </div>
+      {!loading && !erro && abaAtiva === 'performance' && dadosPerformance && (
+        <>
+          <section className="kpi-section">
+            <PerformanceCards dados={dadosPerformance} />
+          </section>
+
+          <section className="charts-section">
+            <div className="charts-grid">
+              <ClassificacaoChart dados={dadosPerformance} />
+              <HorariosPicoChart dados={dadosPerformance} />
+            </div>
+          </section>
+        </>
       )}
 
       <footer className="dashboard-footer">
