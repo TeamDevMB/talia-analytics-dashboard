@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { SignOut, Info } from '@phosphor-icons/react'
-import LeadsModal from './LeadsModal'
+import LeadsAbandonoModal from './LeadsAbandonoModal'
 import './AbandonoChart.css'
 
 function AbandonoChart({ dados }) {
@@ -27,7 +27,8 @@ function AbandonoChart({ dados }) {
     setModalAberto(false)
     setEtapaSelecionada(null)
   }
- return (
+
+  return (
     <>
       <div className="abandono-container">
         <div className="abandono-header">
@@ -84,7 +85,7 @@ function AbandonoChart({ dados }) {
       </div>
 
       {modalAberto && (
-        <LeadsModal 
+        <LeadsAbandonoModal 
           etapa={etapaSelecionada}
           periodo={dados.periodo_dias}
           onClose={fecharModal}
