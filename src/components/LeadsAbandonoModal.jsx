@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, MagnifyingGlass, Phone, EnvelopeSimple, Buildings, Tag, SortAscending, SortDescending } from '@phosphor-icons/react'
+import { X, MagnifyingGlass, Phone, EnvelopeSimple, Buildings, Tag, SortDescending, User, Calendar } from '@phosphor-icons/react'
 import './LeadsModal.css'
 
 const API_URL = 'https://talia-analytics-api-production.up.railway.app'
@@ -72,7 +72,7 @@ function LeadsAbandonoModal({ etapa, periodo, onClose }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={e => e.stopPropagation()}>
+      <div className="modal-container modal-abandono" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <div className="modal-title-group">
             <h2 className="modal-title">{etapaLabel}</h2>
@@ -84,26 +84,21 @@ function LeadsAbandonoModal({ etapa, periodo, onClose }) {
         </div>
 
         <div className="modal-filters">
-          <div className="search-container">
-            <MagnifyingGlass size={20} />
+          <div className="search-form">
+            <MagnifyingGlass size={20} className="search-icon" />
             <input
               type="text"
-              placeholder="Buscar por nome..."
+              className="search-input"
+              placeholder="Buscar por nome ou telefone..."
               value={busca}
               onChange={e => setBusca(e.target.value)}
             />
           </div>
 
-          <div className="sort-container">
-            <button
-              className={`sort-btn ${ordenacao === 'recentes' ? 'active' : ''}`}
-              onClick={() => setOrdenacao('recentes')}
-              title="Mais recentes"
-            >
-              <SortDescending size={18} />
-              Mais recentes
-            </button>
-          </div>
+          <button className="sort-button" onClick={() => setOrdenacao(ordenacao === 'recentes' ? 'antigos' : 'recentes')}>
+            <SortDescending size={18} />
+            {ordenacao === 'recentes' ? 'Mais recentes' : 'Mais antigos'}
+          </button>
         </div>
 
         <div className="modal-content">
@@ -115,7 +110,7 @@ function LeadsAbandonoModal({ etapa, periodo, onClose }) {
           )}
 
           {erro && (
-            <div className="modal-erro">
+            <div className="modal-error">
               <p>Erro: {erro}</p>
             </div>
           )}
@@ -131,41 +126,43 @@ function LeadsAbandonoModal({ etapa, periodo, onClose }) {
               {leadsFiltrados.map(lead => (
                 <div key={lead.id} className="lead-card">
                   <div className="lead-header">
-                    <span className="lead-nome">{lead.nome}</span>
-                    <span className="lead-status abandono">ABANDONO</span>
+                    <div className="lead-name-group">
+                      <User size={18} weight="duotone" />
+                      <span className="lead-name">{lead.nome}</span>
+                    </div>
+                    <span className="lead-badge nao-qualificado">ABANDONO</span>
                   </div>
                   
-                  <div className="lead-info">
-                    {lead.empresa && lead.empresa !== "Não informado" && (
-                      <div className="lead-info-item">
-                        <Buildings size={16} />
+                  <div className="lead-details">
+                    {lead.empresa && (
+                      <div className="lead-row">
+                        <Buildings size={16} weight="duotone" />
                         <span>{lead.empresa}</span>
                       </div>
                     )}
-                    {lead.email && lead.email !== "Não informado" && (
-                      <div className="lead-info-item">
-                        <EnvelopeSimple size={16} />
+                    {lead.email && (
+                      <div className="lead-row">
+                        <EnvelopeSimple size={16} weight="duotone" />
                         <span>{lead.email}</span>
                       </div>
                     )}
-                    {lead.telefone && lead.telefone !== "Não informado" && (
-                      <div className="lead-info-item">
-                        <Phone size={16} />
+                    {lead.telefone && (
+                      <div className="lead-row">
+                        <Phone size={16} weight="duotone" />
                         <span>{lead.telefone}</span>
                       </div>
                     )}
-                    {lead.servico_interesse && lead.servico_interesse !== "Não informado" && (
-                      <div className="lead-info-item">
-                        <Tag size={16} />
+                    {lead.servico_interesse && (
+                      <div className="lead-row">
+                        <Tag size={16} weight="duotone" />
                         <span>{lead.servico_interesse}</span>
                       </div>
                     )}
-                  </div>
-
-                  <div className="lead-footer">
-                    <span className="lead-data">
-                      Última interação: {formatarData(lead.data_ultima_interacao)}
-                    </span>
+                    
+                    <div className="lead-row lead-data">
+                      <Calendar size={16} weight="duotone" />
+                      <span>Última interação: {formatarData(lead.data_ultima_interacao)}</span>
+                    </div>
                   </div>
                 </div>
               ))}
